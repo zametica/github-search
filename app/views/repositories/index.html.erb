@@ -1,0 +1,20 @@
+<div class="container pt-5 d-flex flex-column flex-center justify-content-center">
+<%= form_tag repositories_path, method: :get, data: { turbo_frame: 'repos-results', controller: 'repositories', action: 'input->repositories#submit' } do |f| %>
+  <%= text_field_tag :q, nil, class: 'form-control mb-4', placeholder: 'Search...' %>
+<% end %>
+
+<%= turbo_frame_tag 'repos-results', data: { turbo_action: 'advance' } do %>
+  <table class="table table-striped">
+    <thead>
+      <tr class="w-full">
+        <th>Repo</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody id="repos_list"></tbody>
+  </table>
+  <%= turbo_frame_tag :pagination,
+                      loading: :lazy,
+                      src: repositories_path(format: :turbo_stream, q: params[:q]) %>
+<% end %>
+</div>
